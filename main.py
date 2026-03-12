@@ -84,6 +84,39 @@ def main():
 
     def calculate():
 
+        name = name_var.get()
+        if not name:
+            messagebox.showerror("Requires name", "Please enter athlete's name.")
+            return
+        
+        try:
+            current_weight_kg = float(current_weight_kg_var.get())
+            if current_weight_kg <= 0:
+                messagebox.showerror("Requires positive number", "Please enter a valid weight.")
+                return
+        except ValueError:
+            messagebox.showerror("Requires a number", "Weight requires a number.")
+            return
+        
+        try:
+            competitions_entered = int(competitions_entered_var.get())
+            if competitions_entered < 0:
+                messagebox.showerror("Requires non-negative number", "Competitions entered cannot be negative.")
+                return
+        except ValueError:
+            messagebox.showerror("Requires a number", "Competitions entered requires a number.")
+            return
+        
+        try:
+            private_coaching_hours = float(private_coaching_hours_var.get())
+            if private_coaching_hours < 0:
+                messagebox.showerror("Requires non-negative number", "Private coaching hours cannot be negative.")
+                return
+        except ValueError:
+            messagebox.showerror("Requires a number", "Private coaching hours requires a number.")
+            return
+            
+
         athlete = Athlete(
             name=name_var.get(),
             training_plan=plan_var.get(),
@@ -128,6 +161,7 @@ def main():
         summary_total_cost_var.set(f"£{athlete.total_cost}")
 
         show_summary()
+
 
     # ----------------------------------------------------
     # FORM WIDGETS
