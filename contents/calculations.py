@@ -2,6 +2,11 @@
 #                   Calculations                  #
 #-------------------------------------------------#
 
+"""
+This module demonstrates functional programming through the use of small functions that process one operation.
+Outside of assignment demonstration purposes many if not all of these functions may have been written under 
+the Athlete class.
+"""
 import contents.data
 
 def lookup_training_plan(training_plan):

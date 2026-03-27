@@ -2,7 +2,17 @@
 #                      MAIN PROGRAM
 #--------------------------------------------------------#
 
-# import necessary libraries for GUI
+"""
+Main Program for the North Sussex Judo Fee Calculator.
+
+This module demonstartes a Tkinter-based graphical user interface that allows
+users to enter athlete information and calculate monthly training costs.
+
+The GUI demonstrates event-driven programming where user interaction with the
+'Calculate' button triggers the program logic
+"""
+
+# import necessary libraries for the GUI
 import tkinter as tk
 from tkinter import ttk, messagebox
 
@@ -22,10 +32,7 @@ def main():
     root.geometry("450x300")
     root.resizable(False, False)
 
-    # ----------------------------------------------------
     # GUI variables for form
-    # ----------------------------------------------------
-
     name_var = tk.StringVar()
     plan_var = tk.StringVar(value=TRAINING_PLANS[0])
     gender_var = tk.StringVar(value=GENDER[0])
@@ -33,10 +40,7 @@ def main():
     competitions_entered_var = tk.StringVar(value="0")
     private_coaching_hours_var = tk.StringVar(value="0")
 
-    # ----------------------------------------------------
     # GUI variables for summary
-    # ----------------------------------------------------
-
     summary_name_var = tk.StringVar()
     summary_weight_category_var = tk.StringVar()
     summary_plan_var = tk.StringVar()
@@ -44,17 +48,11 @@ def main():
     summary_coaching_cost_var = tk.StringVar()
     summary_total_cost_var = tk.StringVar()
 
-    # ----------------------------------------------------
-    # Widget lists for hide/show
-    # ----------------------------------------------------
-
+    # Widget lists for the hide/show functionality
     form_widgets = []
     summary_widgets = []
 
-    # ----------------------------------------------------
-    # Screen switching
-    # ----------------------------------------------------
-
+    # Methods for switching between form and summary views
     def hide_form():
         for widget in form_widgets:
             widget.grid_remove()
@@ -75,20 +73,21 @@ def main():
             widget.grid()
         root.update_idletasks()
 
+    #placeholder for future save functionality
     def save_placeholder():
         messagebox.showinfo("Save", "Save functionality not implemented yet.")
 
-    # ----------------------------------------------------
-    # Calculation
-    # ----------------------------------------------------
 
+    # Calculation method that runs when 'Calculate' button is pressed
     def calculate():
-
         name = name_var.get()
+
+        #error handling for name input
         if not name:
             messagebox.showerror("Requires name", "Please enter athlete's name.")
             return
         
+        #error handling for weight input
         try:
             current_weight_kg = float(current_weight_kg_var.get())
             if current_weight_kg <= 0:
@@ -98,6 +97,7 @@ def main():
             messagebox.showerror("Requires a number", "Weight requires a number.")
             return
         
+        #error handling for competitions entered input
         try:
             competitions_entered = int(competitions_entered_var.get())
             if competitions_entered < 0:
@@ -107,6 +107,7 @@ def main():
             messagebox.showerror("Requires a number", "Competitions entered requires a number.")
             return
         
+        #error handling for private coaching hours input
         try:
             private_coaching_hours = float(private_coaching_hours_var.get())
             if private_coaching_hours < 0:
@@ -116,7 +117,7 @@ def main():
             messagebox.showerror("Requires a number", "Private coaching hours requires a number.")
             return
             
-
+        # Create Athlete instance with form data
         athlete = Athlete(
             name=name_var.get(),
             training_plan=plan_var.get(),
@@ -126,29 +127,27 @@ def main():
             private_coaching_hours=float(private_coaching_hours_var.get())
         )
 
+        # Perform calculations using the calculations module and stores results in the athlete instance
         athlete.plan_fee = contents.calculations.lookup_training_plan(
             athlete.training_plan
         )
-
         athlete.weight_category = contents.calculations.determine_weight_category(
             contents.calculations.lookup_category_table(athlete.gender),
             athlete.current_weight_kg
         )
-
         athlete.competition_cost = contents.calculations.calculate_competition_cost(
             athlete.competitions_entered
         )
-
         athlete.coaching_cost = contents.calculations.calculate_private_coaching(
             athlete.private_coaching_hours
         )
-
         athlete.total_cost = contents.calculations.calculate_total_cost(
             athlete.plan_fee,
             athlete.competition_cost,
             athlete.coaching_cost
         )
 
+        #Update summary variables with calculated results
         summary_name_var.set(athlete.name)
         summary_weight_category_var.set(athlete.weight_category)
         summary_plan_var.set(f"£{athlete.plan_fee} ({athlete.training_plan})")
@@ -160,16 +159,15 @@ def main():
         )
         summary_total_cost_var.set(f"£{athlete.total_cost}")
 
+        # change to summary view
         show_summary()
 
-
-    # ----------------------------------------------------
-    # FORM WIDGETS
-    # ----------------------------------------------------
-
+    # FORM WIDGETS - stored in variables for easy management of show/hide functionality
+   
+    #Name input
     label_name = ttk.Label(root, text="Name:")
     entry_name = ttk.Entry(root, textvariable=name_var)
-
+    # Gender selection
     label_gender = ttk.Label(root, text="Gender:")
     optionmenu_gender = ttk.OptionMenu(root, gender_var, gender_var.get(), *GENDER)
 

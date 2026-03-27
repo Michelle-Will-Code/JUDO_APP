@@ -4,8 +4,12 @@
 
 """ 
 This module defines the Athlete class, that represents an athlete with their attributes and 
-costs. This gives an example of how to use a class to encapsulate data and its related functionality 
+functions. This gives an example of how to use a class to encapsulate data and its related functionality 
 in an object-oriented way.
+
+Currently the Athlete class shows only the attributes and not behaviours tied to them. These functions 
+are in calculations.py to help demonstrate functional programming. Outside of assignment parameters, I 
+would have placed most of the calculations within this class.
 """
 
 class Athlete:

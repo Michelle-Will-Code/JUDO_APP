@@ -2,6 +2,15 @@
 #           TEST CASES          #
 #-------------------------------#
 
+"""
+This module contains test cases that I performed on data as it was created to ensure that it worked correctly
+before moving on.
+Includes tests:
+1. To ascertain if the dictionary look ups were working as expected.
+2. That calculations worked as expected.
+3. That the Athlete class initialised and updated with new data.
+"""
+
 from contents.athlete_class import Athlete
 from contents.data import GENDER_MAP, WEIGHT_CATEGORIES
 import contents.calculations
