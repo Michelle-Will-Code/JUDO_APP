@@ -51,8 +51,13 @@ def main():
     # Widget lists for the hide/show functionality
     form_widgets = []
     summary_widgets = []
+    welcome_widgets = []
 
     # Methods for switching between form and summary views
+    def hide_welcome():
+        for widget in welcome_widgets:
+            widget.grid_remove()
+
     def hide_form():
         for widget in form_widgets:
             widget.grid_remove()
@@ -60,6 +65,13 @@ def main():
     def hide_summary():
         for widget in summary_widgets:
             widget.grid_remove()
+
+    def show_welcome():
+        hide_form()
+        hide_summary()
+        for widget in welcome_widgets:
+            widget.grid()
+        root.update_idletasks()
 
     def show_form():
         hide_summary()
@@ -84,7 +96,10 @@ def main():
 
         #error handling for name input
         if not name:
-            messagebox.showerror("Requires name", "Please enter athlete's name.")
+            messagebox.showerror("Requires name", "Please enter a name.")
+            return
+        if any(char.isdigit() for char in name):
+            messagebox.showerror("Invalid name", "Name must not contain numbers.")
             return
         
         #error handling for weight input
@@ -101,20 +116,20 @@ def main():
         try:
             competitions_entered = int(competitions_entered_var.get())
             if competitions_entered < 0:
-                messagebox.showerror("Requires non-negative number", "Competitions entered cannot be negative.")
+                messagebox.showerror("Requires non-negative number", "Competitions Entered cannot be negative.")
                 return
         except ValueError:
-            messagebox.showerror("Requires a number", "Competitions entered requires a number.")
+            messagebox.showerror("Requires a number", "Competitions Entered requires a number.")
             return
         
         #error handling for private coaching hours input
         try:
             private_coaching_hours = float(private_coaching_hours_var.get())
             if private_coaching_hours < 0:
-                messagebox.showerror("Requires non-negative number", "Private coaching hours cannot be negative.")
+                messagebox.showerror("Requires non-negative number", "Private Coaching Hours cannot be negative.")
                 return
         except ValueError:
-            messagebox.showerror("Requires a number", "Private coaching hours requires a number.")
+            messagebox.showerror("Requires a number", "Private Coaching Hours requires a number.")
             return
             
         # Create Athlete instance with form data
@@ -162,7 +177,29 @@ def main():
         # change to summary view
         show_summary()
 
+    # ----------------------------------------------------
+    # WELCOME WIDGETS - stored in variables for easy management of show/hide functionality
+    # ----------------------------------------------------
+   
+    label_name = ttk.Label(root, text="Welcome to the North Sussex Judo Fee Calculator!")
+    
+    button_calculate_fees = ttk.Button(root, text="Calculate Fees", command=lambda: [hide_welcome(), show_form()])
+    button_exit = ttk.Button(root, text="Exit", command=root.quit)
+
+    # Grid positions
+    label_name.grid(row=0, column=0, columnspan=2, pady=20)
+    button_calculate_fees.grid(row=1, column=0, padx=10, pady=10)
+    button_exit.grid(row=1, column=1, padx=10, pady=10)
+
+    welcome_widgets.extend([
+        label_name,
+        button_calculate_fees,
+        button_exit
+    ])
+
+    # ----------------------------------------------------
     # FORM WIDGETS - stored in variables for easy management of show/hide functionality
+    # ----------------------------------------------------
    
     #Name input
     label_name = ttk.Label(root, text="Name:")
@@ -216,9 +253,9 @@ def main():
         button_calculate
     ])
 
-    # ----------------------------------------------------
-    # SUMMARY WIDGETS
-    # ----------------------------------------------------
+    # ------------------------------------------------------------------------------------
+    # SUMMARY WIDGETS - stored in variables for easy management of show/hide functionality
+    # ------------------------------------------------------------------------------------
 
     label_title = ttk.Label(root, text="Summary")
 
@@ -279,6 +316,7 @@ def main():
     ])
 
     # Start with summary hidden
+    hide_form()
     hide_summary()
 
     root.mainloop()
