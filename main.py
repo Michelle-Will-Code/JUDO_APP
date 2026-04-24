@@ -15,6 +15,7 @@ The GUI demonstrates event-driven programming where user interaction with the
 # import necessary libraries for the GUI
 import tkinter as tk
 from tkinter import ttk, messagebox
+from PIL import Image, ImageTk
 
 # import custom modules
 import contents.calculations
@@ -31,6 +32,10 @@ def main():
     # Window settings
     root.geometry("450x300")
     root.resizable(False, False)
+
+    # Configure grid layout
+    root.columnconfigure(0, weight=1)
+    root.columnconfigure(1, weight=1)
 
     # GUI variables for form
     name_var = tk.StringVar()
@@ -181,20 +186,35 @@ def main():
     # WELCOME WIDGETS - stored in variables for easy management of show/hide functionality
     # ----------------------------------------------------
    
-    label_name = ttk.Label(root, text="Welcome to the North Sussex Judo Fee Calculator!")
+    # Load image
+    logo_image = Image.open("contents/judo_logo.png")
+    logo_image = logo_image.resize((100,100))
+    logo_photo = ImageTk.PhotoImage(logo_image)
+
+    # Create label with image
+    logo_label = ttk.Label(root, image=logo_photo)
+    logo_label.image = logo_photo
+
+    label_welcome = ttk.Label(root, text="Welcome to the North Sussex Judo Fee Calculator!")
     
     button_calculate_fees = ttk.Button(root, text="Calculate Fees", command=lambda: [hide_welcome(), show_form()])
     button_exit = ttk.Button(root, text="Exit", command=root.quit)
 
+    label_dev = ttk.Label(root, text="Developed by AQ Digital Solutions - 2026")
+
     # Grid positions
-    label_name.grid(row=0, column=0, columnspan=2, pady=20)
-    button_calculate_fees.grid(row=1, column=0, padx=10, pady=10)
-    button_exit.grid(row=1, column=1, padx=10, pady=10)
+    logo_label.grid(row=0, column=0, columnspan=2, pady=(20, 10))
+    label_welcome.grid(row=1, column=0, columnspan=2, pady=10)
+    button_calculate_fees.grid(row=2, column=0, pady=20)
+    button_exit.grid(row=2, column=1, padx=10, pady=20)
+    label_dev.grid(row=3, column=0, columnspan=2, pady=20)
 
     welcome_widgets.extend([
-        label_name,
+        logo_label,
+        label_welcome,
         button_calculate_fees,
-        button_exit
+        button_exit,
+        label_dev
     ])
 
     # ----------------------------------------------------
